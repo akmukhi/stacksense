@@ -55,3 +55,13 @@ class UserRepository(IUserRepository):
             )
         return None
     
+    def is_password_correct(self, form_data: OAuth2PasswordRequestForm = Depends()) -> bool:
+        user = self.get_user(form_data.username)
+
+        if user is None or not pwd_context.verify(form_data.password, user.password):
+            return False
+        return True
+
+    def get_access_token(self, form_data = OAuth2PasswordRequestForm = Depends()):
+        
+    
