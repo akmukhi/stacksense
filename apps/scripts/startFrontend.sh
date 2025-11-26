@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #navigate to the frontend directory
-cd ../frontend
+cd ../frontend/stacksense
 
 #install dependencies
 npm install
