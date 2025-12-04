@@ -1,27 +1,16 @@
-import os
-from pymongo import MongoClient
-from dotenv import load_dotenv
+"""
+Legacy entity manager - kept for backward compatibility.
+New code should use database.py and SQLAlchemy models directly.
+"""
+from database import SessionLocal, Base, engine
 
-#TODO Replace with Postgres not Mongo
+# Create all tables
+def init_db():
+    Base.metadata.create_all(bind=engine)
 
-#Load environment variables from the .env file
-dotenv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'env')
-load_dotenv(dotenv_path=dotenv_path)
+# Legacy compatibility - returns a database session
+def get_entity_manager():
+    return SessionLocal()
 
-#Get MongoDB credentials from env
-mongo_uri = os.environ.get("MONGO_URI")
-db = os.environ.get("DATABASE")
-
-#Create a MongoDB client
-client = MongoClient(mongo_uri)
-
-#Create the entity manager
-class EntityManager:
-    def __init__(self, client, database):
-        self.client = client
-        self.db = database
-    def get_collection(self, collection_name):
-        return self.client.get_database(self.db).get_collection(collection_name)
-
-#Instantiat the manager
-entity_manager = EntityManager(client, db)
+# Initialize database on import
+init_db()
